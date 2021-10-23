@@ -1,89 +1,56 @@
-import { Component } from "react";
+import { useState } from "react";
 import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
-import LabelInput from "../_share/LabelInput/LabelInput";
+// import LabelInput from "../_share/LabelInput/LabelInput";
 import shortid from "shortid";
+import Form from '../_share/Form/Form';
+import transFormOptions  from '../../assets/options/transactionFormOptions.json';
+import AppProvider, {useAppContext} from '../AppProvider/AppProvider';
 
-class TransactionPage extends Component {
-  state = {
+class TransactionPage = ({transType}) => {
+  const {handleClosePage, addTransaction} = useAppContext();
+
+  const [form, setForm] = useState = ({
     date: "",
     time: "",
     category: "Еда",
     sum: "",
     currency: "USD",
     comment: "",
-  };
+  });
 
-  handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    setForm((prevForm) => ({...prevForm, [name]: value}));
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { transType, addTransaction, handleClosePage } = this.props;
+  const handleSubmit = () => {
+
     addTransaction({
       transType,
-      transaction: { ...this.state, id: shortid.generate() },
+      transaction: { ...form, id: shortid.generate() },
     });
     handleClosePage();
   };
 
-  render() {
-    const { date, time, currency, category, sum, comment } = this.state;
-    const { handleClosePage, transType } = this.props;
+  
     return (
-      <section>
-        <GoBackHeader
+      <AppProvider>
+        <section>
+          <GoBackHeader
           title={transType === "costs" ? "Расход" : "Доходы"}
-          cbGoBack={handleClosePage}
-        />
-        <form onSubmit={this.handleSubmit}>
-          <button type="submit">Ok</button>
-          <LabelInput
-            type="date"
-            title="День"
-            name="date"
-            value={date}
-            cbOnChange={this.handleChange}
+          cbGoBack = {handleClosePage}
           />
-          <LabelInput
-            type="time"
-            title="Время"
-            name="time"
-            value={time}
-            cbOnChange={this.handleChange}
+          <form
+          cbOnSubmit={handleSubmit}
+          handleChange={handleChange}
+          formValues={form}
+          btnTitle={"OK"}
           />
-          <LabelInput
-            type="button"
-            title="Категория"
-            name="category"
-            value={category}
-            // cbOnChange={() => {}}
-          />
-          <LabelInput
-            title="Сумма"
-            name="sum"
-            value={sum}
-            placeholder="Введите сумму"
-            cbOnChange={this.handleChange}
-          />
-          <LabelInput
-            type="button"
-            title="Валюта"
-            name="currency"
-            value={currency}
-            // cbOnChange={() => {}}
-          />
-          <LabelInput
-            name="comment"
-            value={comment}
-            placeholder="Комментарий"
-            cbOnChange={this.handleChange}
-          />
-        </form>
-      </section>
+        </section>
+      </AppProvider>
+      
     );
-  }
-}
+  };
+
 
 export default TransactionPage;
