@@ -6,7 +6,7 @@ import Form from '../_share/Form/Form';
 import transFormOptions  from '../../assets/options/transactionFormOptions.json';
 import AppProvider, {useAppContext} from '../AppProvider/AppProvider';
 
-class TransactionPage = ({transType}) => {
+const TransactionPage = ({transType}) => {
   const {handleClosePage, addTransaction} = useAppContext();
 
   const [form, setForm] = useState = ({
