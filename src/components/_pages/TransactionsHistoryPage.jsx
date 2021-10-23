@@ -1,14 +1,13 @@
-import { number } from 'prop-types';
-import {useAppContext} from '../AppProvider/AppProvider';
-import GoBackHeader from '../_share/GoBackHeader/GoBackHeader';
-import LabelInput from '../_share/LabelInput/LabelInput';
+import { useAppContext } from "../AppProvider/AppProvider";
+import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
+import LabelInput from "../_share/LabelInput/LabelInput";
 
-const TransactionsHistoryPage = ({transactions}) => {
-    const { handleClosePage } = useAppContext();
-    const allSum = transactions.reduce((acc, {sum}) => acc + number(sum), 0);
+const TransactionsHistoryPage = ({ transactions }) => {
+  const { handleClosePage } = useAppContext();
+  const allSum = transactions.reduce((acc, { sum }) => acc + Number(sum), 0);
 
-    return (
-        <section>
+  return (
+    <section>
       <GoBackHeader title={"GoBack"} cbGoBack={handleClosePage} />
       <button name="prev">Prev</button>
       <LabelInput type="date" title="октябрь 2021" />
@@ -30,7 +29,9 @@ const TransactionsHistoryPage = ({transactions}) => {
         </tbody>
       </table>
     </section>
-  );     
+  );
 };
 
 export default TransactionsHistoryPage;
+
+// Date(2021, 9, 23)
