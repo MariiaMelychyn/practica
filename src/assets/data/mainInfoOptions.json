@@ -1,33 +1,33 @@
 {
   "mainInfoCosts": [
     {
-      "namePeriod": "today",
-      "titlePeriod": "Сегодня",
-      "sum": "0.00"
+      "period": "Сегодня",
+      "sum": "0.00",
+      "name": "today"
     },
     {
-      "namePeriod": "week",
-      "titlePeriod": "Неделя",
-      "sum": "0.00"
+      "period": "Неделя",
+      "sum": "0.00",
+      "name": "week"
     },
     {
-      "namePeriod": "month",
-      "titlePeriod": "Месяц",
-      "sum": "0.00"
+      "period": "Месяц",
+      "sum": "0.00",
+      "name": "month"
     }
   ],
   "mainInfoIncomes": [
     {
-      "namePeriod": "month",
-      "titlePeriod": "Месяц",
-      "sum": "0.00"
+      "period": "Месяц",
+      "sum": "0.00",
+      "name": "month"
     }
   ],
   "mainInfoBalance": [
     {
-      "namePeriod": "allTime",
-      "titlePeriod": "Всё время",
-      "sum": "0.00"
+      "period": "Всё время",
+      "sum": "0.00",
+      "name": "allTime"
     }
   ]
 }

@@ -1,21 +1,16 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
-const AppContext = createContext();
+export const BaseContext = createContext();
 
-console.log("AppContext :>> ", AppContext);
 
-export const useAppContext = () => useContext(AppContext);
-
-const AppProvider = ({ children }) => {
+const BaseProvider = ({ children }) => {
   const [activePage, setActivePage] = useState("");
   const [costs, setCosts] = useState([]);
   const [incomes, setIncomes] = useState([]);
 
-  const handleOpenPage = (activePage) => setActivePage(activePage);
+  const toggleActivePage = (activePage = "") => setActivePage(activePage);
 
-  const handleClosePage = () => setActivePage("");
-
-  const addTransaction = ({ transType, transaction }) => {
+  const addTransaction = ({ transaction, transType }) => {
     transType === "costs" &&
       setCosts((prevCosts) => [...prevCosts, transaction]);
     transType === "incomes" &&
@@ -27,6 +22,7 @@ const AppProvider = ({ children }) => {
     const parsedIncomes = JSON.parse(localStorage.getItem("incomes"));
     parsedCosts && setCosts(parsedCosts);
     parsedIncomes && setIncomes(parsedIncomes);
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -36,21 +32,13 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("incomes", JSON.stringify(incomes));
   }, [incomes]);
-
   return (
-    <AppContext.Provider
-      value={{
-        activePage,
-        costs,
-        incomes,
-        handleOpenPage,
-        handleClosePage,
-        addTransaction,
-      }}
+    <BaseContext.Provider
+      value={{ activePage, costs, incomes, toggleActivePage, addTransaction }}
     >
       {children}
-    </AppContext.Provider>
+    </BaseContext.Provider>
   );
 };
 
-export default AppProvider;
+export default BaseProvider;

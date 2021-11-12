@@ -1,36 +1,56 @@
+import { useContext } from "react";
 import MainInfo from "../MainInfo/MainInfo";
 import StatisticsBtns from "../StatisticsBtns/StatisticsBtns";
+import { BaseContext } from "../BaseProvider/BaseProvider";
 import {
   mainInfoCosts,
   mainInfoIncomes,
   mainInfoBalance,
 } from "../../assets/data/mainInfoOptions.json";
-import { useAppContext } from "../AppProvider/AppProvider";
 
-const MainPage = () => {
-  const { handleOpenPage } = useAppContext();
+const MainPage = ({ history }) => {
+  const { toggleActivePage } = useContext(BaseContext);
+
+  const { push, location } = history;
+
+  // /transaction/costs || /transaction/incomes
+
+  const getNextLocation = (pathname) => ({
+    state: {
+      from: location,
+    },
+    pathname,
+  });
+
+  const openTransactionPage = (transType) =>
+    push(getNextLocation("/transaction/" + transType));
+  const openBalancePage = (activePage) =>
+    push(getNextLocation("/" + activePage));
+  const openHistoryPage = (transType) =>
+    push(getNextLocation("/history/" + transType));
+
   return (
     <section>
       <h1>Журнал расходов</h1>
       <MainInfo
-        title={"Расходы"}
+        openActivePage={openTransactionPage}
         options={mainInfoCosts}
+        title="Расходы"
         activePage="costs"
-        handleOpenPage={handleOpenPage}
       />
       <MainInfo
-        title={"Доходы"}
+        openActivePage={openTransactionPage}
         options={mainInfoIncomes}
+        title="Доходы"
         activePage="incomes"
-        handleOpenPage={handleOpenPage}
       />
       <MainInfo
-        title={"Баланс"}
+        openActivePage={openBalancePage}
         options={mainInfoBalance}
+        title="Баланс"
         activePage="balance"
-        handleOpenPage={handleOpenPage}
       />
-      <StatisticsBtns handleOpenPage={handleOpenPage} />
+      <StatisticsBtns openActivePage={openHistoryPage} />
     </section>
   );
 };

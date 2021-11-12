@@ -1,22 +1,26 @@
 import LabelInput from "../LabelInput/LabelInput";
 
-const Form = ({ cbOnSubmit, handleChange, formOpts, formValues, btnTitle }) => {
+const Form = ({
+  cbOnSubmit,
+  formOptions,
+  dataForm,
+  handleChange,
+  handleClick,
+}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     cbOnSubmit();
   };
   return (
     <form onSubmit={handleSubmit}>
-      <button type="submit">{btnTitle}</button>
-      {formOpts.map(({ type, title, name, placeholder }) => (
+      <button type="submit">Ok</button>
+      {formOptions.map((option) => (
         <LabelInput
-          key={name}
-          type={type}
-          title={title}
-          name={name}
-          value={formValues[name]}
-          placeholder={placeholder}
-          cbOnChange={handleChange}
+          key={option.name}
+          {...option}
+          value={dataForm[option.name]}
+          cbOnChange={option.type !== "button" ? handleChange : null}
+          cbOnClick={option.type === "button" ? handleClick : null}
         />
       ))}
     </form>

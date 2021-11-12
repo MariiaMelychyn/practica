@@ -1,17 +1,25 @@
-import { useState } from "react";
-import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
+import { useContext, useState } from "react";
+import { Route, Switch } from "react-router-dom";
 import shortid from "shortid";
+import { BaseContext } from "../BaseProvider/BaseProvider";
 import Form from "../_share/Form/Form";
-import transFormOptions from "../../assets/options/transactionFormOptions.json";
-import AppProvider, { useAppContext } from "../AppProvider/AppProvider";
+import GoBackHeader from "../_share/GoBackHeader/GoBackHeader";
+import CategoriesList from "../CategoriesList/CategoriesList";
+import transactionFormOptios from "../../assets/options/transactionFormOptions";
 
-const TransactionPage = ({ transType }) => {
-  const { handleClosePage, addTransaction } = useAppContext();
+const TransactionPage = ({ match, history, location }) => {
+  const {
+    toggleActivePage,
+    addTransaction,
+    activePage: transType,
+  } = useContext(BaseContext);
+
+  const { push } = history;
 
   const [form, setForm] = useState({
     date: "",
     time: "",
-    category: "Еда",
+    category: transType === "incomes" ? "Зарплата" : "Еда",
     sum: "",
     currency: "USD",
     comment: "",
@@ -24,28 +32,41 @@ const TransactionPage = ({ transType }) => {
 
   const handleSubmit = () => {
     addTransaction({
-      transType,
       transaction: { ...form, id: shortid.generate() },
+      transType,
     });
-    handleClosePage();
+    toggleActivePage();
+  };
+
+  const openCategoryList = () => {
+    const newLocation = {
+      pathname: match.url + "/cat-list",
+      state: { string: "newStateLoacation", from: location },
+    };
+    push(newLocation);
   };
 
   return (
-    <AppProvider>
-      <section>
-        <GoBackHeader
-          title={transType === "costs" ? "Расход" : "Доходы"}
-          cbGoBack={handleClosePage}
-        />
-        <Form
-          cbOnSubmit={handleSubmit}
-          handleChange={handleChange}
-          formOpts={transFormOptions}
-          formValues={form}
-          btnTitle={"OK"}
-        />
-      </section>
-    </AppProvider>
+    <section>
+      <GoBackHeader
+        title={transType === "costs" ? "Расходы" : "Доходы"}
+        handleGoBack={toggleActivePage}
+      />
+      <Switch>
+        <Route path={match.path + "/cat-list"}>
+          <CategoriesList />
+        </Route>
+        <Route>
+          <Form
+            cbOnSubmit={handleSubmit}
+            dataForm={form}
+            formOptions={transactionFormOptios}
+            handleChange={handleChange}
+            handleClick={openCategoryList}
+          />
+        </Route>
+      </Switch>
+    </section>
   );
 };
 
